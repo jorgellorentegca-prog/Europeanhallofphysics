@@ -75,7 +75,7 @@ export default function Home() {
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          <span className="text-[10px] uppercase tracking-[0.2em] text-gold">Scroll</span>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-gold"></span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-gold to-transparent"></div>
         </motion.div>
       </section>

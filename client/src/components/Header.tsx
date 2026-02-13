@@ -45,11 +45,7 @@ export function Header() {
             ))}
           </nav>
 
-          <Link href="/login">
-            <button className="hidden md:block px-5 py-2 rounded-sm border border-gold/50 text-gold font-display text-xs font-bold uppercase tracking-widest hover:bg-gold hover:text-[#003399] transition-all duration-300">
-              Member Access
-            </button>
-          </Link>
+  
         </div>
       </div>
     </header>

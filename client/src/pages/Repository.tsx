@@ -1,180 +1,228 @@
-import { useState } from "react";
-import { useDocuments, useCreateDocument, type InsertDocument } from "@/hooks/use-documents";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { insertDocumentSchema } from "@shared/routes"; // Import from routes to get correct schema type
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Search, Plus, FileText, Download, Loader2 } from "lucide-react";
-import { motion } from "framer-motion";
-import { Header } from "@/components/Header";
-import { z } from "zod";
+import { useState, useMemo } from "react";
+import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { Search, Filter, FileText, Download } from "lucide-react";
 
-// Ensure schema is compatible with client-side form
-const formSchema = insertDocumentSchema.extend({
-  // Override or add fields if needed for the form specifically
-});
+interface DocumentItem {
+  id: number;
+  title: string;
+  description: string;
+  type: string;
+  institution: string | null;
+  country: string | null;
+  fileUrl: string | null;
+  createdAt: string | null;
+}
 
 export default function Repository() {
-  const { data: documents, isLoading } = useDocuments();
-  const [search, setSearch] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState<string>("all");
+  const [selectedCountry, setSelectedCountry] = useState<string>("all");
 
-  const filteredDocs = documents?.filter(doc => 
-    doc.title.toLowerCase().includes(search.toLowerCase()) || 
-    doc.description.toLowerCase().includes(search.toLowerCase())
-  );
+  const { data: documents = [], isLoading } = useQuery<DocumentItem[]>({
+    queryKey: ["/api/documents"],
+  });
+
+  const countries = useMemo(() => {
+    const countrySet = new Set<string>();
+    documents.forEach(doc => {
+      if (doc.country) countrySet.add(doc.country);
+    });
+    return Array.from(countrySet).sort();
+  }, [documents]);
+
+  const types = useMemo(() => {
+    const typeSet = new Set<string>();
+    documents.forEach(doc => typeSet.add(doc.type));
+    return Array.from(typeSet).sort();
+  }, [documents]);
+
+  const filteredDocuments = useMemo(() => {
+    return documents.filter(doc => {
+      const matchesSearch = searchTerm === "" ||
+        doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        doc.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType = selectedType === "all" || doc.type === selectedType;
+      const matchesCountry = selectedCountry === "all" || doc.country === selectedCountry;
+      return matchesSearch && matchesType && matchesCountry;
+    });
+  }, [documents, searchTerm, selectedType, selectedCountry]);
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-12 px-4">
-      <Header />
-      
+    <div className="min-h-screen pt-24 pb-16 px-6" data-testid="page-repository">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end md:items-center gap-6 mb-12 border-b border-white/10 pb-8">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-display text-white mb-2">Document Repository</h1>
-            <p className="text-blue-200/60 max-w-xl">
-              Access papers, exercises, and historical texts from across the continent.
-            </p>
+        <div className="mb-12">
+          <p className="text-xs tracking-widest uppercase text-[#FFCC00]/60 mb-2 font-display">
+            Academic Repository
+          </p>
+          <h1
+            className="mb-4 tracking-tight text-white font-display"
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: 700,
+              letterSpacing: "-0.01em"
+            }}
+          >
+            Document Repository
+          </h1>
+          <p className="text-blue-100/60 max-w-3xl leading-relaxed">
+            A curated collection of academic exercises, research papers, and educational materials
+            contributed by physicists and researchers across European institutions.
+          </p>
+        </div>
+
+        <div className="mb-10 space-y-5">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300/40" />
+            <input
+              type="text"
+              placeholder="Search by title or description..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              data-testid="input-search"
+              className="w-full pl-12 pr-4 py-3.5 bg-[#001a4d]/50 border border-[#FFCC00]/20 text-sm text-white focus:outline-none focus:border-[#FFCC00]/50 transition-colors placeholder:text-blue-300/30 rounded-md"
+            />
           </div>
-          
-          <div className="flex items-center gap-4 w-full md:w-auto">
-            <div className="relative flex-1 md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/50" />
-              <input 
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search archives..."
-                className="w-full bg-[#002266]/50 border border-blue-800 rounded-sm pl-10 pr-4 py-2 text-sm text-white placeholder:text-blue-500 focus:outline-none focus:border-gold/50 transition-colors"
-              />
+
+          <div className="bg-[#001a4d]/30 border border-[#FFCC00]/10 p-5 rounded-md">
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-[#FFCC00]/60" />
+                <span className="text-xs uppercase tracking-wider text-[#FFCC00]/60 font-display">Filters:</span>
+              </div>
+
+              <select
+                value={selectedType}
+                onChange={(e) => setSelectedType(e.target.value)}
+                data-testid="select-type"
+                className="px-4 py-2 bg-[#001033] border border-[#FFCC00]/20 text-sm text-white focus:outline-none focus:border-[#FFCC00]/50 cursor-pointer transition-colors rounded-md"
+              >
+                <option value="all">All Types</option>
+                {types.map(type => (
+                  <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</option>
+                ))}
+              </select>
+
+              <select
+                value={selectedCountry}
+                onChange={(e) => setSelectedCountry(e.target.value)}
+                data-testid="select-country"
+                className="px-4 py-2 bg-[#001033] border border-[#FFCC00]/20 text-sm text-white focus:outline-none focus:border-[#FFCC00]/50 cursor-pointer transition-colors rounded-md"
+              >
+                <option value="all">All Countries</option>
+                {countries.map(country => (
+                  <option key={country} value={country}>{country}</option>
+                ))}
+              </select>
+
+              {(searchTerm || selectedType !== "all" || selectedCountry !== "all") && (
+                <button
+                  onClick={() => {
+                    setSearchTerm("");
+                    setSelectedType("all");
+                    setSelectedCountry("all");
+                  }}
+                  data-testid="button-clear-filters"
+                  className="ml-auto text-xs px-3 py-1.5 border border-[#FFCC00]/20 text-[#FFCC00]/60 hover:text-[#FFCC00] hover:border-[#FFCC00]/40 transition-colors rounded-md"
+                >
+                  Clear filters
+                </button>
+              )}
             </div>
-            
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-gold text-[#003399] hover:bg-white hover:text-[#003399] font-display font-bold uppercase tracking-wider text-xs">
-                  <Plus className="w-4 h-4 mr-2" />
-                  Contribute
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-[#002266] border border-gold/20 text-white max-w-lg">
-                <DialogHeader>
-                  <DialogTitle className="font-display text-2xl text-gold">Submit Document</DialogTitle>
-                </DialogHeader>
-                <CreateDocumentForm onSuccess={() => setIsOpen(false)} />
-              </DialogContent>
-            </Dialog>
+          </div>
+
+          <div className="flex items-center justify-between px-1">
+            <p className="text-sm text-blue-100/50">
+              <span className="text-white">{filteredDocuments.length}</span> {filteredDocuments.length === 1 ? 'result' : 'results'} found
+            </p>
           </div>
         </div>
 
         {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader2 className="w-8 h-8 text-gold animate-spin" />
+          <div className="text-center py-20 border border-[#FFCC00]/10 rounded-md">
+            <div className="w-8 h-8 border-2 border-[#FFCC00]/30 border-t-[#FFCC00] rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-blue-100/40">Loading documents...</p>
           </div>
         ) : (
-          <div className="grid gap-4">
-            {filteredDocs?.length === 0 ? (
-              <div className="text-center py-20 border border-dashed border-white/10 rounded-lg">
-                <FileText className="w-12 h-12 text-white/20 mx-auto mb-4" />
-                <p className="text-blue-200/50">No documents found matching your search.</p>
+          <div className="space-y-3">
+            {filteredDocuments.length === 0 ? (
+              <div className="text-center py-20 border border-[#FFCC00]/10 rounded-md">
+                <FileText className="w-12 h-12 mx-auto mb-4 text-blue-300/20" />
+                <p className="text-blue-100/40">No documents found matching your criteria</p>
               </div>
             ) : (
-              filteredDocs?.map((doc, idx) => (
-                <motion.div 
+              filteredDocuments.map(doc => (
+                <article
                   key={doc.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className="group flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-white/5 border border-white/5 hover:border-gold/30 hover:bg-white/10 rounded-lg transition-all duration-300"
+                  data-testid={`card-document-${doc.id}`}
+                  className="bg-[#001a4d]/30 border border-[#FFCC00]/10 hover:border-[#FFCC00]/30 transition-all duration-200 group rounded-md"
                 >
-                  <div className="flex items-start gap-4 mb-4 md:mb-0">
-                    <div className="p-3 bg-[#003399] rounded border border-white/10 group-hover:border-gold/50 transition-colors">
-                      <FileText className="w-6 h-6 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-display text-white group-hover:text-gold transition-colors">{doc.title}</h3>
-                      <p className="text-sm text-blue-200/60 line-clamp-2 max-w-2xl mb-2">{doc.description}</p>
-                      <div className="flex gap-3 text-xs uppercase tracking-wider text-blue-400">
-                        {doc.type && <span className="px-2 py-0.5 border border-blue-800 rounded">{doc.type}</span>}
-                        {doc.country && <span>{doc.country}</span>}
-                        {doc.institution && <span>• {doc.institution}</span>}
+                  <div className="p-6">
+                    <div className="flex gap-5">
+                      <div className="flex-shrink-0">
+                        <div className="w-14 h-[4.5rem] border border-[#FFCC00]/20 bg-[#001033] flex flex-col items-center justify-center group-hover:border-[#FFCC00]/40 transition-colors rounded-md">
+                          <FileText className="w-7 h-7 text-[#FFCC00]/40 group-hover:text-[#FFCC00]/70 transition-colors mb-1" />
+                          <span className="text-[9px] uppercase tracking-wider text-blue-300/40">{doc.type}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex-grow min-w-0">
+                        <div className="mb-3">
+                          <h3 className="text-base mb-2 leading-snug text-white group-hover:text-[#FFCC00] transition-colors font-display">
+                            {doc.title}
+                          </h3>
+                          <div className="flex items-center gap-3 text-xs text-blue-100/40 flex-wrap">
+                            {doc.institution && <span className="text-white/70">{doc.institution}</span>}
+                            {doc.country && (
+                              <>
+                                <span className="text-blue-300/20">|</span>
+                                <span>{doc.country}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        <p className="text-sm text-blue-100/50 leading-relaxed mb-4 line-clamp-2">
+                          {doc.description}
+                        </p>
+
+                        <div className="flex items-center justify-between gap-4 flex-wrap">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {doc.country && (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#001033] border border-[#FFCC00]/15 text-xs text-blue-100/60 rounded-md">
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                                </svg>
+                                {doc.country}
+                              </span>
+                            )}
+                            <span className="inline-flex items-center px-2.5 py-1 border border-[#FFCC00]/15 text-xs text-[#FFCC00]/70 rounded-md">
+                              {doc.type}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            {doc.fileUrl && (
+                              <a
+                                href={doc.fileUrl}
+                                data-testid={`link-download-${doc.id}`}
+                                className="text-xs px-4 py-2 border border-[#FFCC00]/20 text-[#FFCC00]/70 hover:text-[#FFCC00] hover:border-[#FFCC00]/40 transition-colors flex items-center gap-1.5 whitespace-nowrap rounded-md"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                                Download
+                              </a>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  
-                  <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold hover:text-[#003399] uppercase tracking-widest text-xs font-bold w-full md:w-auto">
-                    <Download className="w-4 h-4 mr-2" />
-                    Access
-                  </Button>
-                </motion.div>
+                </article>
               ))
             )}
           </div>
         )}
       </div>
     </div>
-  );
-}
-
-function CreateDocumentForm({ onSuccess }: { onSuccess: () => void }) {
-  const { mutate, isPending } = useCreateDocument();
-  const form = useForm<InsertDocument>({
-    resolver: zodResolver(insertDocumentSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      type: "paper",
-      institution: "",
-      country: "",
-      fileUrl: "",
-    }
-  });
-
-  const onSubmit = (data: InsertDocument) => {
-    mutate(data, {
-      onSuccess: () => {
-        form.reset();
-        onSuccess();
-      }
-    });
-  };
-
-  return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-4">
-      <div className="space-y-2">
-        <label className="text-xs uppercase tracking-wider text-gold">Title</label>
-        <Input {...form.register("title")} className="bg-black/20 border-white/10 focus:border-gold/50 text-white" />
-        {form.formState.errors.title && <p className="text-red-400 text-xs">{form.formState.errors.title.message}</p>}
-      </div>
-      
-      <div className="space-y-2">
-        <label className="text-xs uppercase tracking-wider text-gold">Description</label>
-        <Input {...form.register("description")} className="bg-black/20 border-white/10 focus:border-gold/50 text-white" />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label className="text-xs uppercase tracking-wider text-gold">Type</label>
-          <select {...form.register("type")} className="w-full h-10 px-3 rounded-md bg-black/20 border border-white/10 focus:border-gold/50 text-white text-sm">
-            <option value="paper">Research Paper</option>
-            <option value="exercise">Exercise</option>
-            <option value="book">Book</option>
-          </select>
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs uppercase tracking-wider text-gold">Country</label>
-          <Input {...form.register("country")} className="bg-black/20 border-white/10 focus:border-gold/50 text-white" />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <label className="text-xs uppercase tracking-wider text-gold">Institution</label>
-        <Input {...form.register("institution")} className="bg-black/20 border-white/10 focus:border-gold/50 text-white" />
-      </div>
-
-      <Button type="submit" disabled={isPending} className="w-full bg-gold text-[#003399] hover:bg-white font-bold mt-4">
-        {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Submit to Archive"}
-      </Button>
-    </form>
   );
 }

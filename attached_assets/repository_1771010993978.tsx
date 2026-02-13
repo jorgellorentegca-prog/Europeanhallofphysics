@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { documents, areasOfKnowledge } from "../data/documents";
 import { Search, Filter, FileText, Download, ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function Repository() {
+export function Repository() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedArea, setSelectedArea] = useState<string>("all");
   const [selectedCountry, setSelectedCountry] = useState<string>("all");
@@ -61,20 +61,20 @@ export default function Repository() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-12">
-          <p className="text-xs tracking-widest uppercase text-gold/60 mb-2 font-display">
+          <p className="text-xs tracking-widest uppercase text-muted-foreground mb-2">
             Academic Repository
           </p>
           <h1 
-            className="mb-4 tracking-tight text-white font-display" 
+            className="mb-4 tracking-tight" 
             style={{ 
               fontSize: "2.5rem", 
-              fontWeight: 700,
+              fontWeight: 300,
               letterSpacing: "-0.01em"
             }}
           >
             Document Repository
           </h1>
-          <p className="text-blue-100/60 max-w-3xl leading-relaxed">
+          <p className="text-muted-foreground max-w-3xl leading-relaxed">
             A curated collection of academic exercises, research papers, and educational materials 
             contributed by physicists and researchers across European institutions.
           </p>
@@ -84,28 +84,28 @@ export default function Repository() {
         <div className="mb-10 space-y-5">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-300/40" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder="Search by title, abstract, or author..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3.5 bg-[#001a4d]/50 border border-[#FFCC00]/20 text-sm text-white focus:outline-none focus:border-[#FFCC00]/50 transition-colors placeholder:text-blue-300/30 rounded-md"
+              className="w-full pl-12 pr-4 py-3.5 bg-card border border-border text-sm focus:outline-none focus:border-[#4A90E2] transition-colors placeholder:text-muted-foreground/60"
             />
           </div>
 
           {/* Filters */}
-          <div className="bg-[#001a4d]/30 border border-[#FFCC00]/10 p-5 rounded-md">
+          <div className="bg-card/30 border border-border/50 p-5">
             <div className="flex items-center gap-4 flex-wrap">
               <div className="flex items-center gap-2">
-                <Filter className="w-4 h-4 text-[#FFCC00]/60" />
-                <span className="text-xs uppercase tracking-wider text-[#FFCC00]/60 font-display">Filters:</span>
+                <Filter className="w-4 h-4 text-muted-foreground" />
+                <span className="text-xs uppercase tracking-wider text-muted-foreground">Filters:</span>
               </div>
 
               <select
                 value={selectedArea}
                 onChange={(e) => setSelectedArea(e.target.value)}
-                className="px-4 py-2 bg-[#001033] border border-[#FFCC00]/20 text-sm text-white focus:outline-none focus:border-[#FFCC00]/50 cursor-pointer transition-colors rounded-md"
+                className="px-4 py-2 bg-background border border-border text-sm focus:outline-none focus:border-[#4A90E2] cursor-pointer transition-colors"
               >
                 <option value="all">All Areas</option>
                 {areasOfKnowledge.map(area => (
@@ -116,7 +116,7 @@ export default function Repository() {
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="px-4 py-2 bg-[#001033] border border-[#FFCC00]/20 text-sm text-white focus:outline-none focus:border-[#FFCC00]/50 cursor-pointer transition-colors rounded-md"
+                className="px-4 py-2 bg-background border border-border text-sm focus:outline-none focus:border-[#4A90E2] cursor-pointer transition-colors"
               >
                 <option value="all">All Countries</option>
                 {countries.map(country => (
@@ -127,7 +127,7 @@ export default function Repository() {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                className="px-4 py-2 bg-[#001033] border border-[#FFCC00]/20 text-sm text-white focus:outline-none focus:border-[#FFCC00]/50 cursor-pointer transition-colors rounded-md"
+                className="px-4 py-2 bg-background border border-border text-sm focus:outline-none focus:border-[#4A90E2] cursor-pointer transition-colors"
               >
                 <option value="all">All Years</option>
                 {years.map(year => (
@@ -143,7 +143,7 @@ export default function Repository() {
                     setSelectedCountry("all");
                     setSelectedYear("all");
                   }}
-                  className="ml-auto text-xs px-3 py-1.5 border border-[#FFCC00]/20 text-[#FFCC00]/60 hover:text-[#FFCC00] hover:border-[#FFCC00]/40 transition-colors rounded-md"
+                  className="ml-auto text-xs px-3 py-1.5 border border-border/50 text-muted-foreground hover:text-foreground hover:border-border transition-colors"
                 >
                   Clear filters
                 </button>
@@ -153,14 +153,14 @@ export default function Repository() {
 
           {/* Results summary */}
           <div className="flex items-center justify-between px-1">
-            <p className="text-sm text-blue-100/50">
-              <span className="text-white">{filteredDocuments.length}</span> {filteredDocuments.length === 1 ? 'result' : 'results'} found
+            <p className="text-sm text-muted-foreground">
+              <span className="text-foreground">{filteredDocuments.length}</span> {filteredDocuments.length === 1 ? 'result' : 'results'} found
               {filteredDocuments.length > 0 && totalPages > 1 && (
                 <span> • Page {currentPage} of {totalPages}</span>
               )}
             </p>
             {filteredDocuments.length > 0 && (
-              <p className="text-xs text-blue-100/50">
+              <p className="text-xs text-muted-foreground">
                 Showing {((currentPage - 1) * itemsPerPage) + 1}–{Math.min(currentPage * itemsPerPage, filteredDocuments.length)} of {filteredDocuments.length}
               </p>
             )}
@@ -170,9 +170,9 @@ export default function Repository() {
         {/* Document List */}
         <div className="space-y-3">
           {currentDocuments.length === 0 ? (
-            <div className="text-center py-20 border border-[#FFCC00]/10 rounded-md">
-              <FileText className="w-12 h-12 mx-auto mb-4 text-blue-300/20" />
-              <p className="text-blue-100/40">No documents found matching your criteria</p>
+            <div className="text-center py-20 border border-border/50">
+              <FileText className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-30" />
+              <p className="text-muted-foreground">No documents found matching your criteria</p>
             </div>
           ) : (
             currentDocuments.map(doc => {
@@ -180,15 +180,15 @@ export default function Repository() {
               return (
                 <article
                   key={doc.id}
-                  className="bg-[#001a4d]/30 border border-[#FFCC00]/10 hover:border-[#FFCC00]/30 transition-all duration-200 group rounded-md"
+                  className="bg-card border border-border hover:border-[#4A90E2] transition-all duration-200 group"
                 >
                   <div className="p-6">
                     <div className="flex gap-5">
                       {/* File Icon */}
                       <div className="flex-shrink-0">
-                        <div className="w-14 h-18 border border-[#FFCC00]/20 bg-[#001033] flex flex-col items-center justify-center group-hover:border-[#FFCC00]/40 transition-colors rounded-md">
-                          <FileText className="w-7 h-7 text-[#FFCC00]/40 group-hover:text-[#FFCC00]/70 transition-colors mb-1" />
-                          <span className="text-[9px] uppercase tracking-wider text-blue-300/40">PDF</span>
+                        <div className="w-14 h-18 border border-border bg-background flex flex-col items-center justify-center group-hover:border-[#4A90E2] transition-colors">
+                          <FileText className="w-7 h-7 text-muted-foreground group-hover:text-[#4A90E2] transition-colors mb-1" />
+                          <span className="text-[9px] uppercase tracking-wider text-muted-foreground">PDF</span>
                         </div>
                       </div>
 
@@ -197,22 +197,22 @@ export default function Repository() {
                         {/* Title and Metadata */}
                         <div className="mb-3">
                           <Link 
-                            href={`/document/${doc.id}`}
+                            to={`/document/${doc.id}`}
                             className="group/title"
                           >
-                            <h3 className="text-base mb-2 leading-snug text-white group-hover:text-[#FFCC00] transition-colors font-display">
+                            <h3 className="text-base mb-2 leading-snug group-hover/title:text-[#4A90E2] transition-colors">
                               {doc.title}
                             </h3>
                           </Link>
-                          <div className="flex items-center gap-3 text-xs text-blue-100/40 flex-wrap">
-                            <span className="text-white/80">{doc.authors.map(a => a.name).join(", ")}</span>
-                            <span className="text-blue-300/20">•</span>
+                          <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
+                            <span className="text-foreground/80">{doc.authors.map(a => a.name).join(", ")}</span>
+                            <span className="text-muted-foreground/40">•</span>
                             <span>{doc.year}</span>
                           </div>
                         </div>
 
                         {/* Abstract */}
-                        <p className="text-sm text-blue-100/50 leading-relaxed mb-4 line-clamp-2">
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">
                           {doc.abstract}
                         </p>
 
@@ -221,7 +221,7 @@ export default function Repository() {
                           {/* Tags */}
                           <div className="flex items-center gap-2 flex-wrap">
                             {/* Country Badge */}
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#001033] border border-[#FFCC00]/15 text-xs text-blue-100/60 rounded-md">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-background border border-border/70 text-xs">
                               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
                               </svg>
@@ -230,17 +230,18 @@ export default function Repository() {
 
                             {/* Area Badge */}
                             <Link
-                              href={`/area/${doc.area}`}
-                              className="inline-flex items-center px-2.5 py-1 border border-[#FFCC00]/15 text-xs text-[#FFCC00]/70 hover:text-[#FFCC00] transition-colors rounded-md"
+                              to={`/area/${doc.area}`}
+                              className="inline-flex items-center px-2.5 py-1 border border-border/50 text-xs hover:border-[#4A90E2]/50 hover:text-[#4A90E2] transition-colors"
+                              style={{ color: "#4A90E2", borderColor: "rgba(74, 144, 226, 0.2)" }}
                             >
-                              {area?.name || doc.area}
+                              {area?.name}
                             </Link>
 
                             {/* Keywords */}
                             {doc.keywords.slice(0, 2).map((keyword, idx) => (
                               <span
                                 key={idx}
-                                className="inline-flex items-center px-2.5 py-1 bg-white/5 border border-white/10 text-xs text-blue-100/40 rounded-md"
+                                className="inline-flex items-center px-2.5 py-1 bg-muted/30 border border-border/40 text-xs text-muted-foreground"
                               >
                                 {keyword}
                               </span>
@@ -250,14 +251,19 @@ export default function Repository() {
                           {/* Actions */}
                           <div className="flex items-center gap-2">
                             <Link
-                              href={`/document/${doc.id}`}
-                              className="text-xs px-4 py-2 border border-[#FFCC00]/20 text-white hover:border-[#FFCC00] hover:text-[#FFCC00] transition-colors whitespace-nowrap rounded-md"
+                              to={`/document/${doc.id}`}
+                              className="text-xs px-4 py-2 border border-border hover:border-[#4A90E2] hover:text-[#4A90E2] transition-colors whitespace-nowrap"
                             >
                               View
                             </Link>
                             <a
                               href={doc.pdfUrl}
-                              className="text-xs px-4 py-2 border border-[#FFCC00]/20 text-[#FFCC00]/70 hover:text-[#FFCC00] hover:border-[#FFCC00]/40 transition-colors flex items-center gap-1.5 whitespace-nowrap rounded-md bg-[#FFCC00]/5"
+                              className="text-xs px-4 py-2 border transition-colors flex items-center gap-1.5 whitespace-nowrap"
+                              style={{ 
+                                color: "#4A90E2",
+                                borderColor: "rgba(74, 144, 226, 0.3)",
+                                backgroundColor: "rgba(74, 144, 226, 0.05)"
+                              }}
                             >
                               <Download className="w-3.5 h-3.5" />
                               Download
@@ -275,16 +281,16 @@ export default function Repository() {
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="mt-10 border-t border-white/5 pt-8">
+          <div className="mt-10 border-t border-border/50 pt-8">
             <div className="flex items-center justify-between">
               {/* Previous Button */}
               <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className={`flex items-center gap-2 px-4 py-2.5 border text-sm transition-colors rounded-md ${
+                className={`flex items-center gap-2 px-4 py-2.5 border text-sm transition-colors ${
                   currentPage === 1
-                    ? 'border-white/5 text-blue-100/20 cursor-not-allowed'
-                    : 'border-[#FFCC00]/20 text-white hover:border-[#FFCC00] hover:text-[#FFCC00]'
+                    ? 'border-border/30 text-muted-foreground/40 cursor-not-allowed'
+                    : 'border-border hover:border-[#4A90E2] hover:text-[#4A90E2]'
                 }`}
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -294,16 +300,17 @@ export default function Repository() {
               {/* Page Numbers */}
               <div className="flex items-center gap-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+                  // Show first, last, current, and pages around current
                   const showPage = page === 1 || 
                                    page === totalPages || 
                                    Math.abs(page - currentPage) <= 1;
-
+                  
                   const showEllipsis = (page === currentPage - 2 && currentPage > 3) ||
                                       (page === currentPage + 2 && currentPage < totalPages - 2);
 
                   if (showEllipsis) {
                     return (
-                      <span key={page} className="px-2 text-blue-100/30">
+                      <span key={page} className="px-2 text-muted-foreground">
                         …
                       </span>
                     );
@@ -315,10 +322,10 @@ export default function Repository() {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`min-w-[36px] h-9 px-3 text-sm border transition-colors rounded-md ${
+                      className={`min-w-[36px] h-9 px-3 text-sm border transition-colors ${
                         page === currentPage
-                          ? 'border-[#FFCC00] bg-[#FFCC00]/10 text-[#FFCC00]'
-                          : 'border-white/10 text-white hover:border-[#FFCC00]/40 hover:text-[#FFCC00]'
+                          ? 'border-[#4A90E2] bg-[#4A90E2]/10 text-[#4A90E2]'
+                          : 'border-border hover:border-[#4A90E2]/50 hover:text-[#4A90E2]'
                       }`}
                     >
                       {page}
@@ -331,10 +338,10 @@ export default function Repository() {
               <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className={`flex items-center gap-2 px-4 py-2.5 border text-sm transition-colors rounded-md ${
+                className={`flex items-center gap-2 px-4 py-2.5 border text-sm transition-colors ${
                   currentPage === totalPages
-                    ? 'border-white/5 text-blue-100/20 cursor-not-allowed'
-                    : 'border-[#FFCC00]/20 text-white hover:border-[#FFCC00] hover:text-[#FFCC00]'
+                    ? 'border-border/30 text-muted-foreground/40 cursor-not-allowed'
+                    : 'border-border hover:border-[#4A90E2] hover:text-[#4A90E2]'
                 }`}
               >
                 Next
@@ -344,7 +351,7 @@ export default function Repository() {
 
             {/* Page info */}
             <div className="text-center mt-4">
-              <p className="text-xs text-blue-100/30">
+              <p className="text-xs text-muted-foreground">
                 Page {currentPage} of {totalPages} • {filteredDocuments.length} total {filteredDocuments.length === 1 ? 'document' : 'documents'}
               </p>
             </div>

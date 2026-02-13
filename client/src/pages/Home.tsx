@@ -189,6 +189,7 @@ export default function Home() {
           <Link href="/about" className="hover:text-gold transition-colors">Mission</Link>
           <Link href="/repository" className="hover:text-gold transition-colors">Archive</Link>
           <Link href="/contact" className="hover:text-gold transition-colors">Contact</Link>
+          <Link href="/terms" className="hover:text-gold transition-colors">Terms</Link>
         </div>
         <p className="text-xs text-blue-500 font-mono">
           © {new Date().getFullYear()} European Hall of Physics. All rights reserved. <br/>

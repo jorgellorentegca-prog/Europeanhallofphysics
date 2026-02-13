@@ -9,6 +9,7 @@ export function Header() {
     { href: "/repository", label: "Repository" },
     { href: "/collaborators", label: "Collaborators" },
     { href: "/about", label: "About" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (

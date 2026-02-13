@@ -6,6 +6,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Header } from "@/components/Header";
 import Home from "@/pages/Home";
 import Repository from "@/pages/Repository";
+import DocumentDetail from "@/pages/DocumentDetail";
+import Contact from "@/pages/Contact";
+import Terms from "@/pages/Terms";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -15,17 +18,20 @@ function Router() {
       <Switch>
         <Route path="/" component={Home} />
         <Route path="/repository" component={Repository} />
+        <Route path="/document/:id" component={DocumentDetail} />
+        <Route path="/contact" component={Contact} />
+        <Route path="/terms" component={Terms} />
         {/* Placeholder pages for navigation items */}
         <Route path="/collaborators" component={() => (
           <div className="min-h-screen pt-32 px-4 text-center">
             <h1 className="text-4xl font-display text-gold mb-4">Collaborators</h1>
-            <p className="text-white/60">Coming soon.</p>
+            <p className="text-white/60 font-body">Our network of institutional partners.</p>
           </div>
         )} />
         <Route path="/about" component={() => (
           <div className="min-h-screen pt-32 px-4 text-center">
             <h1 className="text-4xl font-display text-gold mb-4">About Us</h1>
-            <p className="text-white/60">Mission and vision statement page.</p>
+            <p className="text-white/60 font-body">Mission and vision statement page.</p>
           </div>
         )} />
         

@@ -9,6 +9,7 @@ import Repository from "@/pages/Repository";
 import DocumentDetail from "@/pages/DocumentDetail";
 import Contact from "@/pages/Contact";
 import Terms from "@/pages/Terms";
+import About from "@/pages/About";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -21,17 +22,12 @@ function Router() {
         <Route path="/document/:id" component={DocumentDetail} />
         <Route path="/contact" component={Contact} />
         <Route path="/terms" component={Terms} />
+        <Route path="/about" component={About} />
         {/* Placeholder pages for navigation items */}
         <Route path="/collaborators" component={() => (
           <div className="min-h-screen pt-32 px-4 text-center">
             <h1 className="text-4xl font-display text-gold mb-4">Collaborators</h1>
             <p className="text-white/60 font-body">Our network of institutional partners.</p>
-          </div>
-        )} />
-        <Route path="/about" component={() => (
-          <div className="min-h-screen pt-32 px-4 text-center">
-            <h1 className="text-4xl font-display text-gold mb-4">About Us</h1>
-            <p className="text-white/60 font-body">Mission and vision statement page.</p>
           </div>
         )} />
         

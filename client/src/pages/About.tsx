@@ -111,7 +111,7 @@ export default function About() {
           className="mt-32 text-center border-t border-white/5 pt-16"
         >
           <p className="text-2xl font-display text-gold italic max-w-2xl mx-auto leading-relaxed">
-            "If you want to learn physics, you must do physics. I"
+            "If you want to learn physics, you must do physics."
           </p>
           <p className="mt-6 text-blue-100/40 uppercase tracking-[0.3em] text-[10px]">
             Jorge Llorente

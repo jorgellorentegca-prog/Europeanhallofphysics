@@ -82,7 +82,7 @@ export const documents: Document[] = [
     area: "mechanics",
     abstract: "This comprehensive treatment explores advanced formulations of classical mechanics, and the thrust-weight ratio of such a machine. We present the initial calculations a company as NASA would have faced initially when developping the first rocket models.",
     year: 2025,
-    pdfUrl: "#",
+    pdfUrl: "https://drive.google.com/file/d/1GDLPx_V-nEgzW90Igq4jAWuPxkJOBu2U/view?usp=sharing",
     keywords: ["Energetic conservation", "variational principles", "classical mechanics"]
   },
   {
@@ -100,7 +100,7 @@ export const documents: Document[] = [
   },
   {
     id: "doc-003",
-    title: "The Sneaky Salesman. System analysis as to determine an engine's validity",
+    title: "The Sneaky Salesman. System analysis as to determine an engine's validity through thermal cycles",
     authors: [
       { name: "Jorge Llorente", affiliation: "EHOP", country: "Spain" }
     ],
@@ -108,7 +108,7 @@ export const documents: Document[] = [
     area: "thermodynamics",
     abstract: "The analysis of a proposed Internal Combustion Engine (ICE) in a product in which we have limited data, so as to showcase some of the due diligence attained to engineering process.",
     year: 2026,
-    pdfUrl: "#",
+    pdfUrl: "https://drive.google.com/file/d/1ekDBrxTtxL5ZdSl2gsmDKgCmzZ7j2wCb/view?usp=sharing",
     keywords: ["thermodynamics", "chemical analysis", "non-equilibrium systems"]
   },
   {

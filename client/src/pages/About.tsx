@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import metropolParasol from "@assets/metropol-parasol-1_1771178528548.jpg";
+import atomiumBruselas from "@assets/atomium-bruselas_1771178528549.jpg";
 
 export default function About() {
   return (
@@ -20,7 +22,7 @@ export default function About() {
             Our Foundation
           </p>
           <h1 className="text-4xl md:text-6xl font-display text-white mb-8 tracking-tight">
-            Preserving European <br/> Scientific Heritage
+            Facilitating physics collaboration <br/> among Europe
           </h1>
           <div className="h-1 w-20 bg-gold mx-auto rounded-full mb-8"></div>
         </motion.div>
@@ -35,15 +37,20 @@ export default function About() {
           >
             <h2 className="text-2xl font-display text-white">The EHOP Mission</h2>
             <p className="text-blue-100/60 leading-relaxed text-lg">
-              The European Hall of Physics (EHOP) was established with a singular vision: 
-              to curate and preserve the collective knowledge of physics education across the continent. 
-              Our digital archive serves as a bridge between historical academic rigor and modern 
-              research accessibility.
+              The European Hall of Physics (EHOP) is an independent initiative that aims to explore 
+              physics issues of interest to industry, businesses, and academics today.
+              Regardless of the field you have studied or the educational path you have followed, I 
+              believe that we have all encountered something at some point that our teachers have said, 
+              “I won't explain because it's outside the syllabus,” or “it's interesting, but it's not 
+              worth it/we're running out of time.” This project is not a page for disseminating physics 
+              exercises for university entrance exams or physics theory without any background, but 
+              rather for all those brilliant ideas that, for one reason or another, were left on the 
+              drawing board.
             </p>
             <p className="text-blue-100/40 leading-relaxed">
               From seminal exercises in Oviedo to research papers in Geneva, we collect 
               materials that showcase the unique pedagogical approaches of different 
-              European institutions.
+              European institutions, professors and researchers.
             </p>
           </motion.div>
           <motion.div 
@@ -52,10 +59,8 @@ export default function About() {
             viewport={{ once: true }}
             className="relative aspect-video rounded-2xl overflow-hidden border border-[#FFCC00]/20 shadow-2xl group"
           >
-            <div className="absolute inset-0 bg-[#001033] flex items-center justify-center">
-              <span className="text-gold/20 font-display uppercase tracking-widest text-sm group-hover:text-gold transition-colors">Archive Infrastructure Image</span>
-            </div>
-            {/* Replace with actual image: <img src="..." className="w-full h-full object-cover" /> */}
+            <img src={metropolParasol} alt="Metropol Parasol" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-60 pointer-events-none"></div>
           </motion.div>
         </div>
 
@@ -67,10 +72,8 @@ export default function About() {
             viewport={{ once: true }}
             className="relative aspect-square rounded-2xl overflow-hidden border border-[#FFCC00]/20 shadow-2xl group order-2 lg:order-1"
           >
-            <div className="absolute inset-0 bg-[#001033] flex items-center justify-center">
-              <span className="text-gold/20 font-display uppercase tracking-widest text-sm group-hover:text-gold transition-colors">Collaborative Research Image</span>
-            </div>
-            {/* Replace with actual image: <img src="..." className="w-full h-full object-cover" /> */}
+            <img src={atomiumBruselas} alt="Atomium Brussels" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-60 pointer-events-none"></div>
           </motion.div>
           <motion.div 
             initial={{ opacity: 0, x: 30 }}
@@ -80,7 +83,7 @@ export default function About() {
           >
             <h2 className="text-2xl font-display text-white">European Collaboration</h2>
             <p className="text-blue-100/60 leading-relaxed text-lg">
-              Our network spans across borders, uniting institutions from Spain to Poland. 
+              Our network spans across borders, uniting institutions all through Europe. 
               By standardizing physics metadata, we enable a truly continental approach to 
               academic preservation and discovery.
             </p>
@@ -108,10 +111,10 @@ export default function About() {
           className="mt-32 text-center border-t border-white/5 pt-16"
         >
           <p className="text-2xl font-display text-gold italic max-w-2xl mx-auto leading-relaxed">
-            "Physics is a universal language, but its history is deeply rooted in the European scientific tradition."
+            "If you want to learn physics, you must do physics. I"
           </p>
           <p className="mt-6 text-blue-100/40 uppercase tracking-[0.3em] text-[10px]">
-            EHOP Executive Committee
+            Jorge Llorente
           </p>
         </motion.div>
       </div>

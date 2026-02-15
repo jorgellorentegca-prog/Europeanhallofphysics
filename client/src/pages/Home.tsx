@@ -44,7 +44,7 @@ export default function Home() {
             </div>
             
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-black text-white mb-6 leading-tight drop-shadow-2xl">
-              The European <br />
+              The European Hall of Physics <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-yellow-200 to-gold">Hall of Physics</span>
             </h1>
             
